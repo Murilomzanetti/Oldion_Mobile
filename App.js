@@ -2,7 +2,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import ElderlyAccountScreen from './screens/ElderlyAccountScreen';
-import CreateResponsibleOrElderly from './screens/CreateResponsibleOrElderly';
+import CreateResponsibleOrElderlyScreen from './screens/CreateResponsibleOrElderlyScreen';
 import CreateAccountScreen from './screens/CreateAccountScreen';
 import CreateYourNameScreen from './screens/CreateYourNameScreen';
 import ConnectBraceletScreen from './screens/ConnectBraceletScreen';
@@ -14,10 +14,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="CreateResponsibleOrElderly"
+        initialRouteName="CreateResponsibleOrElderlyScreen"
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="CreateResponsibleOrElderly" component={CreateResponsibleOrElderly} />
+        <Stack.Screen name="CreateResponsibleOrElderlyScreen" component={CreateResponsibleOrElderlyScreen} />
         <Stack.Screen name="CreateAccountScreen" component={CreateAccountScreen} />
         <Stack.Screen name="CreateYourNameScreen" component={CreateYourNameScreen} />
         <Stack.Screen name="ConnectBraceletScreen" component={ConnectBraceletScreen} />
