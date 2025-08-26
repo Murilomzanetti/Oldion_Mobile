@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import LoginAccountScreen from './LoginAccountScreen';
 
 export default function CreateAccountScreen({ navigation }) {
   const [email, setEmail] = useState('');
@@ -42,7 +43,7 @@ export default function CreateAccountScreen({ navigation }) {
       </TouchableOpacity>
 
       <Text style={styles.loginText}>
-        Já tem uma conta? <Text onPress={navigation.navigate ('LoginAccountScreen')} style={styles.link}>Entrar</Text>
+        Já tem uma conta? <Text onPress={() => {navigation.navigate('LoginAccountScreen')}} style={styles.link}>Entrar</Text>
       </Text>
     </LinearGradient>
   );
