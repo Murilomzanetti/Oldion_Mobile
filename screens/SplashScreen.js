@@ -12,7 +12,7 @@ export default function SplashScreen({ navigation }) {
         duration: 800,
         useNativeDriver: true,
       }).start(() => {
-        navigation.replace('CreateAccountScreen');
+        navigation.replace('CreateResponsibleOrElderly');
       });
     }, 2000);
   }, []);
