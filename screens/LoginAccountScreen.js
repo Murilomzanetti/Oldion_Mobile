@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function LoginAccountScreen() {
+export default function CreateAccountScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,8 +12,10 @@ export default function LoginAccountScreen() {
       style={styles.container}
     >
       <Text style={styles.infoText}>
-        Conta de responsável é do usuário que ajuda o idoso e tem acesso a suas informaçõess
+        Entrar em conta
       </Text>
+
+      <View style={styles.line} />
 
       <TextInput
         style={styles.input}
@@ -29,9 +31,18 @@ export default function LoginAccountScreen() {
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.button}>
+      <View style={styles.line} />
+
+      <TouchableOpacity onPress={() => {navigation.navigate('CreateYourNameScreen')}} style={styles.button}>
         <Text style={styles.buttonText}>Continuar</Text>
       </TouchableOpacity>
+
+      <Text style={styles.loginText}>
+          Não tem uma conta?{' '}
+          <Text onPress={() => {navigation.navigate('CreateAccountScreen')}} style={styles.link}>
+              Criar
+          </Text>
+      </Text>
     </LinearGradient>
   );
 }
@@ -44,17 +55,23 @@ const styles = StyleSheet.create({
   },
   infoText: {
     textAlign: 'center',
-    fontSize: 14,
+    fontSize: 35,
     color: '#9C4DCC',
     marginBottom: 20,
   },
+  line: {
+    borderBottomColor: '#9C4DCC',
+    borderBottomWidth: 2,
+    marginVertical: 15,
+  },
   input: {
-    borderWidth: 1,
+    borderWidth: 2,
     borderColor: '#000',
-    borderRadius: 8,
-    padding: 10,
+    borderRadius: 15,
+    padding: 25,
     marginBottom: 15,
     backgroundColor: '#FFF',
+    fontSize: 20, // Texto maior nos campos
   },
   button: {
     backgroundColor: '#D8A6F5',
@@ -75,6 +92,7 @@ const styles = StyleSheet.create({
   loginText: {
     textAlign: 'center',
     marginTop: 20,
+    fontSize: 25,
   },
   link: {
     color: '#9C4DCC',

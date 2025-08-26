@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import LoginAccountScreen from './LoginAccountScreen';
 
-export default function CreateAccountScreen({ navigation }) {
+export default function CreateAccountScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   return (
     <LinearGradient
@@ -14,44 +12,34 @@ export default function CreateAccountScreen({ navigation }) {
       style={styles.container}
     >
       <Text style={styles.infoText}>
-        Conta de responsável é do usuário que ajuda o idoso e tem acesso a suas informações
+        Criar nome de usuario
       </Text>
-
-      <View style={styles.line} />
 
       <TextInput
         style={styles.input}
-        placeholder="Inserir e-mail"
+        placeholder="Seu nome completo"
         value={email}
         onChangeText={setEmail}
       />
       <TextInput
         style={styles.input}
-        placeholder="Criar uma senha"
+        placeholder="Nome de usuário"
         secureTextEntry
         value={password}
         onChangeText={setPassword}
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Confirmar senha"
-        secureTextEntry
-        value={confirmPassword} 
-        onChangeText={setConfirmPassword}
-      />
 
-      <View style={styles.line} />
-
-      <TouchableOpacity onPress={() => {navigation.navigate('CreateYourNameScreen')}} style={styles.button}>
-        <Text style={styles.buttonText}>Continuar</Text>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.buttonText}>Criar</Text>
       </TouchableOpacity>
 
       <Text style={styles.loginText}>
-          Já tem uma conta?{' '}
-          <Text onPress={() => {navigation.navigate('LoginAccountScreen')}} style={styles.link}>
-              Entrar
-          </Text>
-      </Text>
+              Já tem uma conta?{' '}
+              <Text style={styles.link}>
+                Entrar
+              </Text>
+            </Text>
+            
     </LinearGradient>
   );
 }
@@ -64,7 +52,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     textAlign: 'center',
-    fontSize: 35,
+    fontSize: 40,
     color: '#9C4DCC',
     marginBottom: 20,
   },
