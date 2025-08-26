@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import ElderlyAccountScreen from './screens/ElderlyAccountScreen';
 import CreateResponsibleOrElderly from './screens/CreateResponsibleOrElderly';
 import CreateAccountScreen from './screens/CreateAccountScreen';
 import CreateYourNameScreen from './screens/CreateYourNameScreen';
@@ -22,6 +22,7 @@ export default function App() {
         <Stack.Screen name="CreateYourNameScreen" component={CreateYourNameScreen} />
         <Stack.Screen name="ConnectBraceletScreen" component={ConnectBraceletScreen} />
         <Stack.Screen name="LoginAccountScreen" component={LoginAccountScreen} />
+        <Stack.Screen name="ElderlyAccountScreen" component={ElderlyAccountScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

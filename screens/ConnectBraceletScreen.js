@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function ConnectBraceletScreen() {
+export default function ConnectBraceletScreen({ navigation }) {
   const [bluetoothPopup, setBluetoothPopup] = useState(false);
   const [connected, setConnected] = useState(false);
 
@@ -28,7 +28,7 @@ export default function ConnectBraceletScreen() {
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.createButton}>
+      <TouchableOpacity onPress={() => navigation.navigate('ElderlyAccountScreen')} style={styles.createButton}>
         <Text style={styles.createText}>Criar</Text>
       </TouchableOpacity>
 

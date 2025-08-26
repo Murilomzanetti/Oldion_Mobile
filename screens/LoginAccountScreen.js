@@ -29,7 +29,7 @@ export default function LoginAccountScreen({ navigation }) {
         onChangeText={setPassword}
       />
 
-      <TouchableOpacity style={styles.button}>
+      <TouchableOpacity onPress={() => navigation.navigate('ConnectBraceletScreen')} style={styles.button}>
         <Text style={styles.buttonText}>Continuar</Text>
       </TouchableOpacity>
 
