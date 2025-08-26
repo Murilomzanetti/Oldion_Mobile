@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import SplashScreen from './screens/SplashScreen';
 import CreateAccountScreen from './screens/CreateAccountScreen';
+import LoginAccountScreen from './screens/LoginAccountScreen';
 
 const Stack = createStackNavigator();
 
@@ -12,6 +13,8 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="CreateAccountScreen" component={CreateAccountScreen} />
+        <Stack.Screen name="LoginAccountScreen" component={LoginAccountScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
