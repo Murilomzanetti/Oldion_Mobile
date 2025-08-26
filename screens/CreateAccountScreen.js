@@ -33,7 +33,7 @@ export default function CreateAccountScreen({ navigation }) {
         style={styles.input}
         placeholder="Confirmar senha"
         secureTextEntry
-        value={confirmPassword}
+        value={confirmPassword} 
         onChangeText={setConfirmPassword}
       />
 
