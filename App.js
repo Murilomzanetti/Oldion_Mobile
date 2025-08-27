@@ -7,6 +7,7 @@ import CreateAccountScreen from './screens/CreateAccountScreen';
 import CreateYourNameScreen from './screens/CreateYourNameScreen';
 import ConnectBraceletScreen from './screens/ConnectBraceletScreen';
 import LoginAccountScreen from './screens/LoginAccountScreen';
+import SplashScreen from './screens/SplashScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,9 +15,10 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName="CreateResponsibleOrElderlyScreen"
+        initialRouteName="SplashScreen"
         screenOptions={{ headerShown: false }}
       >
+        <Stack.Screen name="SplashScreen" component={SplashScreen} />
         <Stack.Screen name="CreateResponsibleOrElderlyScreen" component={CreateResponsibleOrElderlyScreen} />
         <Stack.Screen name="CreateAccountScreen" component={CreateAccountScreen} />
         <Stack.Screen name="CreateYourNameScreen" component={CreateYourNameScreen} />
