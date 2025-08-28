@@ -8,7 +8,7 @@ export default function AlarmsScreen({ navigation }) {
   const [alarms, setAlarms] = useState([]);
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
-  const [editingIndex, setEditingIndex] = useState(null); // <-- Novo estado para edição
+  const [editingIndex, setEditingIndex] = useState(null); // Novo estado para edição
 
   useEffect(() => {
     loadAlarms();
