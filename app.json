@@ -18,9 +18,19 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#ffffff",
+        "permissions": [
+          "ACESS_FINE_LOCATION",
+          "ACESS_FINE_LOCATION"
+        ],
+        "config": {
+          "googleMaps": {
+            "apikey": "MinhaFuturaAPIGoogleMaps"
+          }
+        }
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.anonymous.MeuProjeto"
     },
     "web": {
       "favicon": "./assets/favicon.png"

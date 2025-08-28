@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: '#D8A6F5',
-    padding: 15,
+    padding: 30,
     borderRadius: 12,
     alignItems: 'center',
-    marginTop: 10,
+    marginTop: 150,
     shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowRadius: 5,
@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#000',
     fontSize: 18,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    bottom: 1
   },
   loginText: {
     textAlign: 'center',

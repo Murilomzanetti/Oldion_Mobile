@@ -15,12 +15,27 @@ export default function ElderlyAccountScreen({ navigation }) {
       <View style={styles.cardContainer}>
         <View style={styles.personCard}>
           <Image
-            source={require('../assets/Ellipse3.png')} 
+            source={require('../assets/Ellipse3.png')}
             style={styles.avatar}
           />
           <Text style={styles.name}>Juca</Text>
           <Icon name="alert-circle-outline" size={22} color="#000" />
         </View>
+
+        {/* Botões de Navegação */}
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => navigation.navigate('AlarmsScreen')}
+        >
+          <Text style={styles.navButtonText}>Ver Localização</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.navButton}
+          onPress={() => navigation.navigate('AlarmsScreen')}
+        >
+          <Text style={styles.navButtonText}>Ver Alarmes</Text>
+        </TouchableOpacity>
       </View>
 
       {/* Botão adicionar */}
@@ -65,6 +80,7 @@ const styles = StyleSheet.create({
     width: '90%',
     borderWidth: 2,
     borderColor: '#000',
+    alignItems: 'center',
   },
   personCard: {
     flexDirection: 'row',
@@ -76,6 +92,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     borderWidth: 2,
     borderColor: '#000',
+    width: '100%',
   },
   avatar: {
     width: 50,
@@ -89,6 +106,21 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: '600',
     flex: 1,
+  },
+  navButton: {
+    backgroundColor: '#A7ECA9',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: '#000',
+    marginTop: 10,
+    width: '100%',
+    alignItems: 'center',
+  },
+  navButtonText: {
+    fontWeight: 'bold',
+    fontSize: 16,
   },
   addButton: {
     backgroundColor: '#D9A4E8',

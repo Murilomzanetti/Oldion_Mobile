@@ -1,17 +1,29 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Modal, FlatList } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ConnectBraceletScreen({ navigation }) {
   const [bluetoothPopup, setBluetoothPopup] = useState(false);
   const [connected, setConnected] = useState(false);
+  const [devices, setDevices] = useState([]);
+
+  const fakeDevices = [
+    { id: '1', name: 'Oldion Pulseira' },
+    { id: '2', name: 'Fone Bluetooth' },
+    { id: '3', name: 'Caixa de Som' },
+  ];
 
   const handleOpenBluetooth = () => {
     setBluetoothPopup(true);
+    // Simula busca de aparelhos próximos
     setTimeout(() => {
-      setBluetoothPopup(false);
-      setConnected(true);
-    }, 2000); // Simula tempo de conexão
+      setDevices(fakeDevices);
+    }, 1000);
+  };
+
+  const handleConnectDevice = (device) => {
+    setConnected(true);
+    setBluetoothPopup(false);
   };
 
   return (
@@ -24,24 +36,39 @@ export default function ConnectBraceletScreen({ navigation }) {
         disabled={connected}
       >
         <Text style={styles.buttonText}>
-          {connected ? 'Conectar ✓' : 'Conectar'}
+          {connected ? 'Conectado ✓' : 'Conectar'}
         </Text>
       </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('ElderlyAccountScreen')} style={styles.createButton}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ElderlyAccountScreen')}
+        style={[styles.createButton, !connected && { backgroundColor: '#ccc' }]}
+        disabled={!connected}
+      >
         <Text style={styles.createText}>Criar</Text>
       </TouchableOpacity>
 
       {/* POPUP BLUETOOTH */}
-      {/*Zanetti estuda sobre Modal*/ }
       <Modal visible={bluetoothPopup} transparent animationType="fade">
-        <View style={styles.modalBackground}> 
+        <View style={styles.modalBackground}>
           <View style={styles.modalBox}>
             <Text style={styles.modalTitle}>Bluetooth</Text>
-            <Text style={styles.modalText}>Pulseira Oldion</Text>
-            <TouchableOpacity style={styles.modalButton}>
-              <Text style={styles.modalButtonText}>Conectar</Text>
-            </TouchableOpacity>
+            {devices.length === 0 ? (
+              <Text style={styles.modalText}>Procurando dispositivos...</Text>
+            ) : (
+              <FlatList
+                data={devices}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <TouchableOpacity
+                    style={styles.modalButton}
+                    onPress={() => handleConnectDevice(item)}
+                  >
+                    <Text style={styles.modalButtonText}>{item.name}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+            )}
           </View>
         </View>
       </Modal>
@@ -57,7 +84,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 40,
+    fontSize: 32,
     color: '#9C4DCC',
     textAlign: 'center',
     marginBottom: 40,
@@ -103,13 +130,13 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 30,
     alignItems: 'center',
-    width: 200,
+    width: 250,
   },
   modalTitle: {
     color: '#FFF',
     fontSize: 22,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 15,
   },
   modalText: {
     color: '#FFF',
@@ -119,6 +146,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFF',
     padding: 10,
     borderRadius: 8,
+    marginVertical: 5,
+    alignItems: 'center',
   },
   modalButtonText: {
     color: '#4B0082',
