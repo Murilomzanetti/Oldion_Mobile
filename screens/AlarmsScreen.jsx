@@ -2,16 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, TextInput, FlatList, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Audio } from 'expo-av';
 
 export default function AlarmsScreen({ navigation }) {
   const [addingAlarm, setAddingAlarm] = useState(false);
   const [alarms, setAlarms] = useState([]);
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
-  const [editingIndex, setEditingIndex] = useState(null); // Novo estado para edição
+  const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
     loadAlarms();
+    const interval = setInterval(checkAlarms, 1000);
+    return () => clearInterval(interval);
   }, []);
 
   const loadAlarms = async () => {
@@ -32,16 +35,42 @@ export default function AlarmsScreen({ navigation }) {
     }
   };
 
+  const playAlarmSound = async () => {
+    const { sound } = await Audio.Sound.createAsync(
+      require('../assets/Sounds/alarm.mp3')
+    );
+    await sound.playAsync();
+  };
+
+  const checkAlarms = () => {
+    const now = new Date();
+    const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(
+      now.getMinutes()
+    ).padStart(2, '0')}`;
+
+    alarms.forEach((alarm) => {
+      if (alarm.time === currentTime) {
+        playAlarmSound();
+      }
+    });
+  };
+
+  const handleTimeChange = (text) => {
+    let formatted = text.replace(/[^0-9]/g, '');
+    if (formatted.length >= 3) {
+      formatted = `${formatted.slice(0, 2)}:${formatted.slice(2, 4)}`;
+    }
+    setTime(formatted);
+  };
+
   const handleAddOrEditAlarm = () => {
     if (time && description) {
       let newAlarms;
       if (editingIndex !== null) {
-        // Editando um alarme existente
         newAlarms = [...alarms];
         newAlarms[editingIndex] = { time, description };
         setEditingIndex(null);
       } else {
-        // Adicionando novo alarme
         newAlarms = [...alarms, { time, description }];
       }
       saveAlarms(newAlarms);
@@ -61,6 +90,13 @@ export default function AlarmsScreen({ navigation }) {
     setDescription(alarms[index].description);
     setEditingIndex(index);
     setAddingAlarm(true);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingIndex(null);
+    setTime('');
+    setDescription('');
+    setAddingAlarm(false);
   };
 
   const renderAlarmItem = ({ item, index }) => (
@@ -110,11 +146,13 @@ export default function AlarmsScreen({ navigation }) {
             <TextInput
               placeholder="Horário:"
               value={time}
-              onChangeText={setTime}
+              onChangeText={handleTimeChange}
               style={styles.input}
+              keyboardType='numeric'
+              maxLength={5}
             />
             <TextInput
-              placeholder="Descrição:"
+              placeholder="Remédio:"
               value={description}
               onChangeText={setDescription}
               style={styles.input}
@@ -125,6 +163,12 @@ export default function AlarmsScreen({ navigation }) {
                 {editingIndex !== null ? 'Salvar Alterações' : 'Salvar Alarme'}
               </Text>
             </TouchableOpacity>
+
+            {editingIndex !== null && (
+              <TouchableOpacity style={styles.cancelEditButton} onPress={handleCancelEdit}>
+                <Text style={styles.buttonText}>Cancelar Edição</Text>
+              </TouchableOpacity>
+            )}
           </>
         )}
       </View>
@@ -139,61 +183,17 @@ export default function AlarmsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#fff', alignItems: 'center' },
-  header: {
-    height: 60,
-    backgroundColor: '#D9FF9F',
-    width: '100%',
-    borderBottomWidth: 2,
-    borderColor: '#000',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingLeft: 10,
-  },
-  backButton: { flexDirection: 'row', alignItems: 'center' },
-  backText: { marginLeft: 5, fontWeight: 'bold' },
-  title: { fontSize: 24, fontWeight: 'bold', marginVertical: 20 },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 25,
+  container: {
+    flex: 1,
     padding: 20,
-    width: '90%',
-    borderWidth: 2,
-    borderColor: '#000',
-    alignItems: 'center',
+    justifyContent: 'center'
   },
-  alarmItem: { marginBottom: 20, alignItems: 'center' },
-  alarmTime: { fontSize: 20, fontWeight: 'bold' },
-  alarmDesc: { fontSize: 16, marginBottom: 10 },
-  buttonsRow: { flexDirection: 'row', gap: 10 },
-  editButton: {
-    backgroundColor: '#FFD700',
-    paddingHorizontal: 15,
-    paddingVertical: 6,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#000',
-    marginRight: 8,
+  title: {
+    textAlign: 'center',
+    fontSize: 35,
+    color: '#9C4DCC',
+    marginBottom: 20
   },
-  cancelButton: {
-    backgroundColor: '#FF6B6B',
-    paddingHorizontal: 15,
-    paddingVertical: 6,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#000',
-  },
-  buttonText: { fontWeight: 'bold', color: '#000' },
-  addButton: {
-    backgroundColor: '#A7ECA9',
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: '#000',
-    marginTop: 10,
-  },
-  addButtonText: { fontWeight: 'bold', textAlign: 'center' },
   input: {
     borderWidth: 2,
     borderColor: '#9C4DCC',
@@ -202,18 +202,88 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     backgroundColor: '#FFF',
     fontSize: 20,
-    color: '#000',
+    color: '#000'
   },
-  emptyText: { fontSize: 18, color: '#999', textAlign: 'center', marginVertical: 20 },
+  alarmItem: {
+    borderWidth: 1,
+    borderColor: '#9C4DCC',
+    borderRadius: 15,
+    padding: 15,
+    marginBottom: 10,
+    backgroundColor: '#FFF'
+  },
+  alarmTime: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#9C4DCC'
+  },
+  alarmDesc: {
+    fontSize: 18,
+    color: '#555',
+    marginBottom: 10
+  },
+  buttonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  editButton: {
+    backgroundColor: '#9C4DCC',
+    padding: 10,
+    borderRadius: 10
+  },
+  cancelButton: {
+    backgroundColor: '#FF5C5C',
+    padding: 10,
+    borderRadius: 10
+  },
+  buttonText: {
+    color: '#FFF',
+    fontSize: 16
+  },
+  addButton: {
+    backgroundColor: '#9C4DCC',
+    padding: 15,
+    borderRadius: 15,
+    marginTop: 15
+  },
+  addButtonText: {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize: 20,
+    fontWeight: 'bold'
+  },
+  cancelEditButton: {
+    backgroundColor: '#FF5C5C',
+    padding: 15,
+    borderRadius: 15,
+    marginTop: 10
+  },
+  emptyText: {
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#999'
+  },
   bottomBar: {
-    position: 'absolute',
-    bottom: 50,
     flexDirection: 'row',
     justifyContent: 'space-around',
-    backgroundColor: '#D9A4E8',
-    width: '100%',
-    paddingVertical: 30,
-    shadowColor: '#000',
-    shadowRadius: 0.2,
+    marginTop: 20
   },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 20
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  backText: {
+    marginLeft: 5,
+    fontSize: 18
+  },
+  card: {
+    backgroundColor: '#f9f9f9',
+    padding: 20,
+    borderRadius: 15
+  }
 });
