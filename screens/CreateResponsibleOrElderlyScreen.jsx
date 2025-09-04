@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
-export default function CreateresonsibleOrElderlyScreen({ navigation }) {
+export default function CreateResponsibleOrElderlyScreen({ navigation }) {
   return (
     <LinearGradient colors={['#ffffff', '#f2e6ff']} style={styles.container}>
       <Text style={styles.infoText}>Criar conta</Text>
@@ -33,7 +33,7 @@ export default function CreateresonsibleOrElderlyScreen({ navigation }) {
         </Text>
       </Text>
     </LinearGradient>
-  );
+  )
 }
 
 const styles = StyleSheet.create({

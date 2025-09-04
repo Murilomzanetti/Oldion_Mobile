@@ -11,6 +11,7 @@ import ConnectBraceletScreen from './screens/ConnectBraceletScreen';
 import LoginAccountScreen from './screens/LoginAccountScreen';
 import SplashScreen from './screens/SplashScreen';
 import AlarmsScreen from './screens/AlarmsScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 
@@ -34,6 +35,8 @@ export default function App() {
         <Stack.Screen name="LoginAccountScreen" component={LoginAccountScreen} />
         <Stack.Screen name="ElderlyAccountScreen" component={ElderlyAccountScreen} />
         <Stack.Screen name="AlarmsScreen" component={AlarmsScreen} />
+        <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

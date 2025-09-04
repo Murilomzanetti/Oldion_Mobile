@@ -5,11 +5,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Audio } from 'expo-av';
 
 export default function AlarmsScreen({ navigation }) {
-  const [addingAlarm, setAddingAlarm] = useState(false);
   const [alarms, setAlarms] = useState([]);
   const [time, setTime] = useState('');
   const [description, setDescription] = useState('');
-  const [editingIndex, setEditingIndex] = useState(null);
 
   useEffect(() => {
     loadAlarms();
@@ -63,20 +61,12 @@ export default function AlarmsScreen({ navigation }) {
     setTime(formatted);
   };
 
-  const handleAddOrEditAlarm = () => {
+  const handleAddAlarm = () => {
     if (time && description) {
-      let newAlarms;
-      if (editingIndex !== null) {
-        newAlarms = [...alarms];
-        newAlarms[editingIndex] = { time, description };
-        setEditingIndex(null);
-      } else {
-        newAlarms = [...alarms, { time, description }];
-      }
+      const newAlarms = [...alarms, { time, description }];
       saveAlarms(newAlarms);
       setTime('');
       setDescription('');
-      setAddingAlarm(false);
     }
   };
 
@@ -85,39 +75,25 @@ export default function AlarmsScreen({ navigation }) {
     saveAlarms(newAlarms);
   };
 
-  const handleEditAlarm = (index) => {
-    setTime(alarms[index].time);
-    setDescription(alarms[index].description);
-    setEditingIndex(index);
-    setAddingAlarm(true);
-  };
-
-  const handleCancelEdit = () => {
-    setEditingIndex(null);
-    setTime('');
-    setDescription('');
-    setAddingAlarm(false);
-  };
-
   const renderAlarmItem = ({ item, index }) => (
-    <View style={styles.alarmItem}>
-      <Text style={styles.alarmTime}>{item.time}</Text>
-      <Text style={styles.alarmDesc}>{item.description}</Text>
-
-      <View style={styles.buttonsRow}>
-        <TouchableOpacity style={styles.editButton} onPress={() => handleEditAlarm(index)}>
-          <Text style={styles.buttonText}>Editar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.cancelButton} onPress={() => handleCancelAlarm(index)}>
-          <Text style={styles.buttonText}>Cancelar</Text>
-        </TouchableOpacity>
+    <View style={styles.alarmBox}>
+      <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+        <View>
+          <Text style={styles.alarmTime}>{item.time}</Text>
+          <Text style={styles.alarmDesc}>{item.description}</Text>
+        </View>
+        <TouchableOpacity style={styles.checkBox} />
       </View>
+
+      <TouchableOpacity style={styles.stopButton} onPress={() => handleCancelAlarm(index)}>
+        <Text style={{ color: "#fff", fontWeight: "bold" }}>Parar</Text>
+      </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
+      {/* HEADER */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#000" />
@@ -127,55 +103,40 @@ export default function AlarmsScreen({ navigation }) {
 
       <Text style={styles.title}>Alarmes</Text>
 
+      {/* CARD */}
       <View style={styles.card}>
-        {!addingAlarm ? (
-          <>
-            <FlatList
-              data={alarms}
-              renderItem={renderAlarmItem}
-              keyExtractor={(item, index) => index.toString()}
-              ListEmptyComponent={<Text style={styles.emptyText}>Nenhum alarme adicionado</Text>}
-            />
+        <FlatList
+          data={alarms}
+          renderItem={renderAlarmItem}
+          keyExtractor={(item, index) => index.toString()}
+          ListEmptyComponent={<Text style={styles.emptyText}>Nenhum alarme adicionado</Text>}
+        />
 
-            <TouchableOpacity style={styles.addButton} onPress={() => setAddingAlarm(true)}>
-              <Text style={styles.addButtonText}>Adicionar</Text>
-            </TouchableOpacity>
-          </>
-        ) : (
-          <>
-            <TextInput
-              placeholder="Horário:"
-              value={time}
-              onChangeText={handleTimeChange}
-              style={styles.input}
-              keyboardType='numeric'
-              maxLength={5}
-            />
-            <TextInput
-              placeholder="Remédio:"
-              value={description}
-              onChangeText={setDescription}
-              style={styles.input}
-            />
+        {/* Inputs */}
+        <TextInput
+          placeholder="Horário:"
+          value={time}
+          onChangeText={handleTimeChange}
+          style={styles.input}
+          keyboardType="numeric"
+          maxLength={5}
+        />
+        <TextInput
+          placeholder="Descrição:"
+          value={description}
+          onChangeText={setDescription}
+          style={styles.input}
+        />
 
-            <TouchableOpacity style={styles.addButton} onPress={handleAddOrEditAlarm}>
-              <Text style={styles.addButtonText}>
-                {editingIndex !== null ? 'Salvar Alterações' : 'Salvar Alarme'}
-              </Text>
-            </TouchableOpacity>
-
-            {editingIndex !== null && (
-              <TouchableOpacity style={styles.cancelEditButton} onPress={handleCancelEdit}>
-                <Text style={styles.buttonText}>Cancelar Edição</Text>
-              </TouchableOpacity>
-            )}
-          </>
-        )}
+        <TouchableOpacity style={styles.addButton} onPress={handleAddAlarm}>
+          <Text style={{ fontWeight: "bold", color: "#000" }}>Adicionar</Text>
+        </TouchableOpacity>
       </View>
 
+      {/* Bottom bar */}
       <View style={styles.bottomBar}>
-        <Ionicons name="home" size={32} color="#000" />
-        <Ionicons name="person-outline" size={32} color="#000" />
+        <Ionicons onPress={() => navigation.navigate('ElderlyAccountScreen')} name="home" size={32} color="#000" />
+        <Ionicons onPress={() => navigation.navigate('ProfileScreen')} name="person-outline" size={32} color="#000" />
         <Ionicons name="settings-outline" size={32} color="#000" />
       </View>
     </View>
@@ -183,107 +144,73 @@ export default function AlarmsScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  container: { flex: 1, backgroundColor: "#fff" },
+  header: {
+    backgroundColor: "#C7F7A6",
+    flexDirection: "row",
+    alignItems: "center",
     padding: 20,
-    justifyContent: 'center'
+    bottom: -10
   },
-  title: {
-    textAlign: 'center',
-    fontSize: 35,
-    color: '#9C4DCC',
+  backButton: { flexDirection: "row", alignItems: "center" },
+  backText: { marginLeft: 5, fontSize: 16, fontWeight: "bold" },
+  title: { textAlign: "center", fontSize: 22, fontWeight: "bold", marginVertical: 15 },
+  card: {
+    margin: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    padding: 20,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3
+  },
+  alarmBox: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 15,
+    padding: 15,
     marginBottom: 20
   },
-  input: {
-    borderWidth: 2,
-    borderColor: '#9C4DCC',
-    borderRadius: 15,
-    padding: 20,
-    marginBottom: 15,
-    backgroundColor: '#FFF',
-    fontSize: 20,
-    color: '#000'
-  },
-  alarmItem: {
-    borderWidth: 1,
-    borderColor: '#9C4DCC',
-    borderRadius: 15,
-    padding: 15,
-    marginBottom: 10,
-    backgroundColor: '#FFF'
-  },
-  alarmTime: {
-    fontSize: 25,
-    fontWeight: 'bold',
-    color: '#9C4DCC'
-  },
-  alarmDesc: {
-    fontSize: 18,
-    color: '#555',
-    marginBottom: 10
-  },
-  buttonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between'
-  },
-  editButton: {
-    backgroundColor: '#9C4DCC',
-    padding: 10,
-    borderRadius: 10
-  },
-  cancelButton: {
-    backgroundColor: '#FF5C5C',
-    padding: 10,
-    borderRadius: 10
-  },
-  buttonText: {
-    color: '#FFF',
-    fontSize: 16
-  },
-  addButton: {
-    backgroundColor: '#9C4DCC',
-    padding: 15,
-    borderRadius: 15,
-    marginTop: 15
-  },
-  addButtonText: {
-    textAlign: 'center',
-    color: '#FFF',
-    fontSize: 20,
-    fontWeight: 'bold'
-  },
-  cancelEditButton: {
-    backgroundColor: '#FF5C5C',
-    padding: 15,
-    borderRadius: 15,
+  alarmTime: { fontSize: 18, fontWeight: "bold" },
+  alarmDesc: { fontSize: 14, color: "#555" },
+  stopButton: {
+    backgroundColor: "#D7A9F7",
+    padding: 8,
+    borderRadius: 10,
+    alignSelf: "center",
     marginTop: 10
   },
-  emptyText: {
-    textAlign: 'center',
-    fontSize: 18,
-    color: '#999'
+  checkBox: {
+    width: 20,
+    height: 20,
+    borderWidth: 2,
+    borderColor: "#000",
+    borderRadius: 4
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#000",
+    borderRadius: 10,
+    padding: 10,
+    marginBottom: 10
+  },
+  addButton: {
+    backgroundColor: "#C7F7A6",
+    padding: 12,
+    borderRadius: 10,
+    alignItems: "center"
   },
   bottomBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    marginTop: 20
+    flexDirection: "row",
+    justifyContent: "space-around",
+    backgroundColor: "#E6C7F7",
+    paddingVertical: 20,
+    position: "absolute",
+    bottom: 0,
+    width: "100%",
+    bottom: 30,
+    height: 70
   },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20
-  },
-  backButton: {
-    flexDirection: 'row',
-    alignItems: 'center'
-  },
-  backText: {
-    marginLeft: 5,
-    fontSize: 18
-  },
-  card: {
-    backgroundColor: '#f9f9f9',
-    padding: 20,
-    borderRadius: 15
-  }
+  emptyText: { textAlign: "center", color: "#aaa", marginVertical: 10 }
 });
