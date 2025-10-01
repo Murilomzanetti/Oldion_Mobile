@@ -207,10 +207,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#E6C7F7",
     paddingVertical: 20,
     position: "absolute",
-    bottom: 0,
-    width: "100%",
     bottom: 30,
-    height: 70
+    height: 70,
+    width: "100%"
   },
   emptyText: { textAlign: "center", color: "#aaa", marginVertical: 10 }
 });

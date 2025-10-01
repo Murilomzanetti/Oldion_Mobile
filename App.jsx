@@ -16,7 +16,6 @@ import ProfileScreen from './screens/ProfileScreen';
 const Stack = createStackNavigator();
 
 export default function App() {
-
   useEffect(() => {
     Notifications.requestPermissionsAsync();
   }, []);
@@ -36,7 +35,6 @@ export default function App() {
         <Stack.Screen name="ElderlyAccountScreen" component={ElderlyAccountScreen} />
         <Stack.Screen name="AlarmsScreen" component={AlarmsScreen} />
         <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );
